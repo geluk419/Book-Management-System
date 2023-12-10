@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>도서 관리 시스템</title>
+
+	<!-- Custom fonts for this template-->
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- ag-Grid CSS (if needed) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ag-grid-community/dist/styles/ag-grid.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ag-grid-community/dist/styles/ag-theme-alpine.css">
+
+</head>
+
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">도서관리 시스템</h1>
+                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"> 회원 가입</a>
+<button type="button" onclick="memberClick()">회원 가입</button>
+<button type="button" id="insertBtn" onclick="insertClick()">도서 등록</button>
+                    </div>
+
+                    <!-- Content Row -->
+                    <div class="row">
+
+                        <div class="col-lg-6 mb-4">
+
+                            <!-- Approach -->
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">도서 목록</h6>
+                                </div>
+                                <div class="card-body">
+                                	<div id="myGrid" style="height: 250px; width: auto;" class="ag-theme-alpine"></div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; book 2023</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- 대출 관리 모달 시작 -->
+    <div class="modal fade" id="borrowModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">대출 이력</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                <input type="hidden" id="bookCode" value="">
+                 <table border="1">
+                    <thead>
+                        <tr>
+                            <td>대출코드</td>
+                            <td>대출일자</td>
+                            <td>반납일자</td>
+                            <td>대출자 ID</td>
+                        </tr>
+                    </thead>
+                    <tbody id="borrowList">
+                    </tbody>
+                </table>
+                <table border="1">
+            		<tr>
+            			<td>대출가능여부</td>
+            			<td id="lastBorrowStatus"></td>
+            		</tr>
+            	</table>
+            	 <div id="inputId">
+	                <label for="memberId">대출자 ID :</label>
+	                <input type="text" id="memberId">
+	            </div>
+                </div>
+                <div class="modal-footer">
+					<button type="button" id="borrowBtn" class="btn btn-primary" onclick="borrowClick()">대출</button>
+					<button type="button" id="returnBtn" class="btn btn-primary" onclick="returnClick()">반납</button>               	
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">닫기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 대출 관리 모달 끝 -->
+    
+	<!-- 도서 등록 모달 시작 -->
+    <div class="modal" id="insertModal">
+        <div class="modal_content">
+            <h2>도서 등록</h2>
+            <div>
+                <table border="1">
+                    <thead>
+                        <tr>
+                            <td>제목</td>
+                            <td>저자</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                				<input type="text" id="title">
+                            </td>
+                            <td>
+                				<input type="text" id="author">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div>
+                <button type="button" onclick="insertBook()">등록</button>
+                <button type="button" onclick="closeModal()">닫기</button>
+            </div>
+        </div>
+        <div class="modal_layer"></div>
+    </div>
+    <!-- 도서 등록 모달 끝 -->
+    
+	<!-- 도서 수정 모달 시작 -->
+    <div class="modal" id="modifyModal">
+        <div class="modal_content">
+            <h2>도서 수정</h2>
+            <div>
+	            <input type="hidden" id="inputBookCode">
+            </div>
+            <div>
+                <table border="1">
+                    <thead>
+                        <tr>
+                            <td>제목</td>
+                            <td>저자</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                				<input type="text" id="inputTitle">
+                            </td>
+                            <td>
+                				<input type="text" id="inputAuthor">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div>
+                <button type="button" onclick="modifyBook()">수정</button>
+                <button type="button" onclick="closeModal()">닫기</button>
+            </div>
+        </div>
+        <div class="modal_layer"></div>
+    </div>
+    <!-- 도서 수정 모달 끝 -->
+    
+	<!-- 회원가입 모달 시작 -->
+    <div class="modal" id="memberModal">
+        <div class="modal_content">
+            <h2>회원 가입</h2>
+            <div>
+                <table border="1">
+                        <tr>
+                            <td>회원 ID</td>
+                            <td>
+                				<input type="text" id="checkId">
+	                            <button type="button" id="checkBtn" onclick="checkId()">중복 확인</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>이름</td>
+                            <td>
+                				<input type="text" id="inputName">
+                            </td>
+						</tr>
+						<tr>
+                            <td>전화번호</td>
+                            <td>
+                				<input type="text" id="inputPhone1" maxlength="3">-
+		                        <input type="text" id="inputPhone2" maxlength="4">-
+		                        <input type="text" id="inputPhone3" maxlength="4">
+                        	</td>
+                        </tr>
+                </table>
+            </div>
+            <div>
+                <button type="button" onclick="joinMember()">가입</button>
+                <button type="button" onclick="closeModal()">닫기</button>
+            </div>
+        </div>
+        <div class="modal_layer"></div>
+    </div>
+    <!-- 회원가입 모달 끝 -->
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- ag-Grid JS -->
+    <script src="https://cdn.jsdelivr.net/npm/ag-grid-community/dist/ag-grid-community.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="js/sb-admin-2.min.js"></script>
+
+    <script>
+        const columnDefs = [
+            {
+                headerName: "대출 관리",
+                cellRenderer: function (params) {
+                    return `<button onclick="manageClick('${params.data.bookCode}')">관리</button>`;
+                },
+                cellStyle: { textAlign: "left" },
+            },
+            { field: "bookCode", headerName: "도서코드", sortable: true },
+            { field: "title", headerName: "제목", sortable: true, cellStyle: { textAlign: "left" } },
+            { field: "author", headerName: "저자", cellStyle: { textAlign: "left" } },
+            {
+                headerName: "도서 수정",
+                cellRenderer: function (params) {
+                    return `<button onclick="modifyClick(this)">수정</button>`;
+                },
+                cellStyle: { textAlign: "left" },
+            },
+        ];
+
+        const rowData = [];
+
+        const gridOptions = {
+            columnDefs: columnDefs,
+            rowData: rowData,
+            defaultColDef: {
+                flex: 1,
+                filter: true,
+                resizable: true,
+                minWidth: 100,
+                headerClass: "centered",
+            },
+            pagination: true,
+            paginationPageSize: 5,
+            paginationPageSizeSelector: [5, 10, 20],
+        };
+        
+        let gridApi;
+
+        $(function() {
+        	const gridDiv = document.querySelector('#myGrid');
+            gridApi = agGrid.createGrid(gridDiv, gridOptions);
+            getData();
+        });
+
+        // 도서 목록
+        function getData() {
+            $.ajax({
+                url: "/api/books",
+                method: "GET",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    console.log('데이터', data);
+                    gridApi.setRowData(data);
+                },
+                error: function (xhr, status, error) {
+                    console.error('상태', status);
+                },
+            });
+        };
+
+        // 관리 버튼
+        function manageClick(bookCode) {
+            $.ajax({
+                url: `/api/borrow/${bookCode}`,
+                method: "GET",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    console.log('데이터', data);
+
+                    let borrowListHTML = '';
+                    let lastBorrowStatus = '';
+                    
+                    $("#bookCode").val(bookCode);
+
+                    data.forEach(borrowVO => {
+                        const borrowDate = new Date(borrowVO.borrowDate);
+                        const formattedBorrowDate = borrowDate.toISOString().split('T')[0];
+
+                        let formattedReturnDate = "";
+
+                        if (borrowVO.returnDate != null) {
+                            const returnDate = new Date(borrowVO.returnDate);
+                            formattedReturnDate = returnDate.toISOString().split('T')[0];
+                        }
+
+                        borrowListHTML += `
+                            <tr>
+                                <td class="borrowCode">${borrowVO.borrowCode}</td>
+                                <td>${formattedBorrowDate}</td>
+                                <td>${formattedReturnDate}</td>
+                                <td>${borrowVO.memberId}</td>
+                            </tr> `;
+
+                        lastBorrowStatus = borrowVO.borrowStatus;
+                    });
+                    
+                    $("#borrowList").html(borrowListHTML);
+                    $("#lastBorrowStatus").html(lastBorrowStatus);
+
+                    const borrowBtn = $("#borrowBtn");
+                    const returnBtn = $("#returnBtn");
+                    const inputId = $("#inputId");
+
+                    if (lastBorrowStatus == 'N') {
+                        inputId.css('display', 'none');
+                        borrowBtn.css('display', 'none');
+                        returnBtn.css('display', 'block');
+                    } else {
+                        inputId.css('display', 'block');
+                        borrowBtn.css('display', 'block');
+                        returnBtn.css('display', 'none');
+                    }
+
+                },
+                error: function (xhr, status, error) {
+                    console.error('상태', status);
+                },
+            });
+
+            $("#borrowModal").modal('show'); 
+        };
+
+        // 모달 닫기 버튼
+        function closeModal() {
+            $(".modal").css("display", "none");
+        };
+        
+        // 대출 버튼
+        function borrowClick(){
+        	const memberId = $("#memberId").val();
+       	    if (!memberId) {
+       	    	alert("아이디를 입력해주세요.");
+				return;
+		     }
+       	    
+        	let bookCode = $("#bookCode").val();
+        	
+        	let borrowVO = JSON.stringify({
+        		bookCode : bookCode,
+        		memberId : memberId
+    		});
+        	
+        	console.log("borrowVO",borrowVO);
+        	
+        	$.ajax({
+                url: "/api/borrow",
+                method: "post",
+                data: borrowVO,
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                      console.log('데이터', data);
+                      alert("대출 처리되었습니다.");
+                      manageClick(bookCode);
+                  },
+                  error: function (xhr, status, error) {
+                      console.error('상태', status);
+                  },
+              });
+        }
+        
+        // 반납 버튼
+        function returnClick(){
+        	let bookCode = $("#bookCode").val();
+        	let lastBorrowCode = $(".borrowCode:last").text();
+        	
+        	let borrowVO = JSON.stringify({
+        		borrowCode : lastBorrowCode
+    		});
+        	
+        	$.ajax({
+                url: "/api/borrow",
+                method: "put",
+                data: borrowVO,
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                      console.log('데이터', data);
+                      alert("반납 처리되었습니다.");
+                      manageClick(bookCode);
+                  },
+                  error: function (xhr, status, error) {
+                      console.error('상태', status);
+                  },
+              });
+        }
+
+        // 도서 등록 모달
+        function insertClick(){
+        	$("#title").val("");
+        	$("#author").val("");
+        	$("#insertModal").css("display", "block");
+        }
+        
+        // 도서 등록하기
+        function insertBook(){
+        	let title = $("#title").val();
+        	let author = $("#author").val();
+        	
+        	if (!title || !author) {
+       	    	alert("제목과 저자를 모두 입력해주세요.");
+				return;
+		     }
+        	
+        	let bookVO = JSON.stringify({
+        		title : title,
+        		author : author
+    		});
+        	console.log("bookVO",bookVO);
+        	
+        	 $.ajax({
+                 url: `/api/book`,
+                 method: "post",
+                 data: bookVO,
+                 contentType: "application/json; charset=utf-8",
+                 success: function (data) {
+                     console.log('데이터', data);
+                     getData();
+                     $(".modal").css("display", "none");
+                     alert("등록 처리되었습니다.");
+                 },
+                 error: function (xhr, status, error) {
+                     console.error('상태', status);
+                 },
+             });
+        }
+        
+        // 도서 수정 모달
+        function modifyClick(button){
+        	const parentRow = button.parentNode.parentNode.parentNode;
+            console.log("parentRow",parentRow);
+        	
+        	const bookCode = parentRow.querySelector('[col-id="bookCode"]').textContent;
+            const title = parentRow.querySelector('[col-id="title"]').textContent;
+            const author = parentRow.querySelector('[col-id="author"]').textContent;
+            console.log(bookCode, title, author);
+            
+            $("#inputBookCode").val(bookCode);
+            $("#inputTitle").val(title);
+            $("#inputAuthor").val(author);
+            
+        	$("#modifyModal").css("display", "block");
+        }
+        
+     	// 도서 수정하기	
+        function modifyBook(){
+        	let bookCode = $("#inputBookCode").val();
+        	let title = $("#inputTitle").val();
+        	let author = $("#inputAuthor").val();
+        	
+        	let bookVO = JSON.stringify({
+        		bookCode : bookCode,
+        		title : title,
+        		author : author
+    		});
+        	
+        	$.ajax({
+                url: "/api/book",
+                method: "put",
+                data: bookVO,
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                      console.log('데이터', data);
+                      getData();
+                      $(".modal").css("display", "none");
+                      alert("수정 처리되었습니다.");
+                  },
+                  error: function (xhr, status, error) {
+                      console.error('상태', status);
+                  },
+              });
+        }
+     	
+     	// 회원가입 버튼
+        function memberClick(){
+        	$("#checkId").prop("readonly", false);
+       		$("#checkBtn").prop("disabled", false);
+        	$("#checkId").val("");
+        	$("#inputName").val("");
+        	$("#inputPhone1").val("");
+        	$("#inputPhone2").val("");
+        	$("#inputPhone3").val("");
+        	
+        	$("#memberModal").css("display", "block");
+        }
+     	
+     	// 회원 가입하기
+        function joinMember(){
+        	let memberId = $("#checkId").val();
+        	let name = $("#inputName").val();
+        	let phoneNumber1 = $("#inputPhone1").val();
+        	let phoneNumber2 = $("#inputPhone2").val();
+        	let phoneNumber3 = $("#inputPhone3").val();
+        	
+        	if (!memberId || !name || !phoneNumber1 || !phoneNumber2 || !phoneNumber3) {
+       	    	alert("모두 입력해주세요.");
+				return;
+		     }
+
+        	if (!$('#checkBtn').prop('disabled')) {
+       	    	alert("ID 중복 확인해주세요.");
+				return;
+		     }
+
+        	const phoneRegex = /^\d{3}-\d{4}-\d{4}$/;
+            if (!phoneRegex.test(`${phoneNumber1}-${phoneNumber2}-${phoneNumber3}`)) {
+                alert("올바른 전화번호 형식이 아닙니다. 숫자만 입력해주세요.");
+                return;
+            }
+        	
+        	let phoneNumber = phoneNumber1 + "-" + phoneNumber2 + "-" + phoneNumber3
+        	
+        	let memberVO = JSON.stringify({
+        		memberId : memberId,
+        		name : name,
+        		phoneNumber : phoneNumber
+    		});
+        	console.log("memberVO",memberVO);
+        	
+        	 $.ajax({
+                 url: `/api/member`,
+                 method: "post",
+                 data: memberVO,
+                 contentType: "application/json; charset=utf-8",
+                 success: function (data) {
+                     console.log('데이터', data);
+                     $(".modal").css("display", "none");
+                     alert("가입 처리되었습니다.");
+                 },
+                 error: function (xhr, status, error) {
+                     console.error('상태', status);
+                 },
+             });
+        }
+     	
+     	// 중복 확인 버튼
+        function checkId(){
+        	var memberId = $("#checkId").val();
+        	console.log("checkId 입력값:", memberId);
+        	
+        	 $.ajax({
+                 url: "/api/member",
+                 method: "get",
+                 data: {memberId: memberId},
+                 contentType: "application/json; charset=utf-8",
+                 success: function (data) {
+                     console.log('데이터', data);
+                     if(data!=0){
+                    	 alert("사용할 수 없는 아이디입니다. 다른 아이디를 입력해 주세요.");
+                     }else{
+                    	 alert("사용 가능한 아이디입니다.");
+                    	 $("#checkId").prop("readonly", true);
+                    	 $("#checkBtn").prop("disabled", true);
+                     }
+                 },
+                 error: function (xhr, status, error) {
+                     console.error('상태', status);
+                 },
+             });
+     	}
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+  "D:/myTool/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.book.mapper.BorrowMapper">
+
+<!-- 대출 이력 -->
+<select id="listBorrow" parameterType="BorrowVO" resultType="BorrowVO">
+	SELECT
+	    borrow_code,
+	    borrow_date,
+	    return_date,
+	    borrow_status,
+	    member_id,
+	    book_code
+	FROM
+	    borrow
+    WHERE
+   		book_code = #{bookCode}
+   	ORDER BY
+    	borrow_code
+</select>
+
+<!-- 도서 대출 -->
+<insert id="borrowBook" parameterType="BorrowVO">
+	<selectKey keyProperty="borrowCode" order="BEFORE" resultType="String" statementType="PREPARED">
+        SELECT
+            'L'
+            || to_char(MAX(to_number(substr(borrow_code, 2))) + 1)
+        FROM
+            borrow
+    </selectKey>
+	INSERT INTO borrow (
+	    borrow_code,
+	    borrow_date,
+	    borrow_status,
+	    member_id,
+	    book_code
+	) VALUES (
+	    #{borrowCode},
+	    sysdate,
+	    'N',
+	    #{memberId},
+	    #{bookCode}
+	)
+</insert>
+
+<!-- 도서 반납 -->
+<update id="returnBook" parameterType="BorrowVO">
+	UPDATE borrow
+	SET
+	    return_date = sysdate,
+	    borrow_status = 'Y'
+	WHERE
+	    borrow_code = #{borrowCode}
+</update>
+
+</mapper>
