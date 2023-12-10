@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+  "D:/myTool/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.book.mapper.BookMapper">
+
+<!-- 도서 목록 -->
+<select id="listBook"  resultType="BookVO">
+	SELECT
+	    book_code,
+	    title,
+	    author
+	FROM
+	    book
+</select>
+
+<!-- 도서 등록 -->
+<insert id="insertBook" parameterType="BookVO">
+    <selectKey keyProperty="bookCode" order="BEFORE" resultType="String" statementType="PREPARED">
+        SELECT
+		    'ISBN'
+		    || coalesce(to_char(MAX(to_number(substr(book_code, 5))) + 1), '1')
+		FROM
+		    book
+    </selectKey>
+    
+    INSERT INTO book (
+        book_code,
+        title,
+        author
+    ) VALUES (
+        #{bookCode},
+        #{title},
+        #{author}
+    )
+</insert>
+
+<!-- 도서 수정 -->
+<update id="updateBook" parameterType="BookVO">
+	UPDATE book
+	SET
+	    title = #{title},
+	    author = #{author}
+	WHERE
+	    book_code = #{bookCode}
+</update>
+
+</mapper>
