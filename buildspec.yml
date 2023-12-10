@@ -1,0 +1,13 @@
+version: 0.2
+
+phases:
+  build:
+    commands:
+      - ./gradlew build
+      - aws cloudformation package --template-file template.yaml --output-template-file packaged-template.yaml --s3-bucket <miji-bucket>
+
+artifacts:
+  type: zip
+  files:
+    - packaged-template.yaml
+    - app.jar
