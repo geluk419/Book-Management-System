@@ -1,12 +1,12 @@
 version: 0.0
 os: windows
 files:
-  - source: D:\myTool\sts4WS\book\
-    destination: C:\Users\Application
+  - source: src/
+    destination: C:\ProgramData\Amazon\CodeDeploy
     overwrite: true
 
 permissions:
-  - object: C:\Users\Application
+  - object: C:\ProgramData\Amazon\CodeDeploy
     pattern: "**"
     owner: Administrators
     group: Users
