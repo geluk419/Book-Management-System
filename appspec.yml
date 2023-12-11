@@ -1,0 +1,12 @@
+version: 0.0
+os: windows
+files:
+  - source: /
+    destination: C:\Users\Application
+    overwrite: true
+
+permissions:
+  - object: C:\Users\Application
+    pattern: "**"
+    owner: Administrators
+    group: Users
