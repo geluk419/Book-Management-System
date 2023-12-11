@@ -2,7 +2,6 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -27,6 +26,24 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ag-grid-community/dist/styles/ag-grid.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ag-grid-community/dist/styles/ag-theme-alpine.css">
 
+<style>
+#borrowDiv tbody {
+    display:block;
+    height:200px;
+    overflow:auto;
+}
+
+#borrowDiv thead, #borrowDiv tbody tr {
+    display:table;
+    width:100%;
+    table-layout:fixed;
+}
+
+#borrowDiv table {
+    width:400px;
+}
+</style>
+
 </head>
 
 <body id="page-top">
@@ -50,9 +67,9 @@
                     </div>
 
                     <!-- Content Row -->
-                    <div class="row">
+                    <div>
 
-                        <div class="col-lg-6 mb-4">
+                        <div class="mb-4">
 
                             <!-- Approach -->
                             <div class="card shadow mb-4">
@@ -61,7 +78,7 @@
                                     <button type="button" id="insertBtn" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-4" onclick="insertClick()">도서 등록</button>
                                 </div>
                                 <div class="card-body">
-                                	<div id="myGrid" style="height: 250px; width: auto;" class="ag-theme-alpine"></div>
+                                	<div id="myGrid" style="height: 500px; width: auto;" class="ag-theme-alpine"></div>
                                 </div>
                             </div>
 
@@ -106,7 +123,7 @@
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
-                <div class="modal-body">
+                <div id="borrowDiv" class="modal-body">
                 	<input type="hidden" id="bookCode" value="">
 	                <table class="table table-bordered dataTable" border="1">
 	                    <thead>
@@ -499,9 +516,14 @@
                 contentType: "application/json; charset=utf-8",
                 success: function (data) {
                       console.log('데이터', data);
+                      
+                      $("#memberId").prop("readonly", false);
+                      $("#checkMemBtn").prop("disabled", false);
                       $("#inputId").css('display', 'block');
                       $("#checkMemBtn").css('display', 'block');
+                      
                       alert("반납 처리되었습니다.");
+                      
                       manageClick(bookCode);
                   },
                   error: function (xhr, status, error) {
