@@ -15,4 +15,6 @@ public class BorrowVO {
 	private String borrowStatus;
 	private String memberId;
 	private String bookCode;
+
+	private String title;
 }

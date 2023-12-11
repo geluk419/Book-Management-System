@@ -45,10 +45,8 @@
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">도서관리 시스템</h1>
-                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"> 회원 가입</a>
-<button type="button" onclick="memberClick()">회원 가입</button>
-<button type="button" id="insertBtn" onclick="insertClick()">도서 등록</button>
+                        <h1 class="h3 mb-0 ml-4 text-gray-800">도서관리 시스템</h1>
+						<button type="button" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm mt-4 mr-4" onclick="memberClick()">회원 가입</button>
                     </div>
 
                     <!-- Content Row -->
@@ -58,8 +56,9 @@
 
                             <!-- Approach -->
                             <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">도서 목록</h6>
+                                <div class="card-header py-3 d-sm-flex align-items-center justify-content-between">
+                                    <h6 class="ml-3 font-weight-bold text-primary">도서 목록</h6>
+                                    <button type="button" id="insertBtn" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-4" onclick="insertClick()">도서 등록</button>
                                 </div>
                                 <div class="card-body">
                                 	<div id="myGrid" style="height: 250px; width: auto;" class="ag-theme-alpine"></div>
@@ -97,40 +96,41 @@
     </a>
 
     <!-- 대출 관리 모달 시작 -->
-    <div class="modal fade" id="borrowModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    <div class="modal fade" id="borrowModal" tabindex="-1" role="dialog" aria-labelledby="borrowModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">대출 이력</h5>
+                    <h5 class="modal-title" id="borrowModalLabel">대출 이력</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                <input type="hidden" id="bookCode" value="">
-                 <table border="1">
-                    <thead>
-                        <tr>
-                            <td>대출코드</td>
-                            <td>대출일자</td>
-                            <td>반납일자</td>
-                            <td>대출자 ID</td>
-                        </tr>
-                    </thead>
-                    <tbody id="borrowList">
-                    </tbody>
-                </table>
-                <table border="1">
-            		<tr>
-            			<td>대출가능여부</td>
-            			<td id="lastBorrowStatus"></td>
-            		</tr>
-            	</table>
-            	 <div id="inputId">
-	                <label for="memberId">대출자 ID :</label>
-	                <input type="text" id="memberId">
-	            </div>
+                	<input type="hidden" id="bookCode" value="">
+	                <table class="table table-bordered dataTable" border="1">
+	                    <thead>
+	                        <tr>
+	                            <th>대출코드</th>
+	                            <th>대출일자</th>
+	                            <th>반납일자</th>
+	                            <th>대출자 ID</th>
+	                        </tr>
+	                    </thead>
+	                    <tbody id="borrowList">
+	                    </tbody>
+	                </table>
+                <p id="lastBorrowStatus" style="color: red;"></p>
+	            <div class="form-group row">
+			        <div id="inputId" class="col-sm-7 mb-3 mb-sm-0">
+		                <input type="text" id="memberId" class="form-control form-control-user" placeholder="대출하실 회원 ID를 적어주세요">
+			        </div>
+			        <div class="col">
+			            <button type="button" id="checkMemBtn" class="btn btn-sm btn-danger btn-user" onclick="checkMemClick()">회원 확인</button>
+			        </div>
+			    </div>
+	            
+	            
                 </div>
                 <div class="modal-footer">
 					<button type="button" id="borrowBtn" class="btn btn-primary" onclick="borrowClick()">대출</button>
@@ -142,113 +142,133 @@
     </div>
     <!-- 대출 관리 모달 끝 -->
     
-	<!-- 도서 등록 모달 시작 -->
-    <div class="modal" id="insertModal">
-        <div class="modal_content">
-            <h2>도서 등록</h2>
-            <div>
-                <table border="1">
+    <!-- 도서 등록 모달 시작 -->
+    <div class="modal fade" id="insertModal" tabindex="-1" role="dialog" aria-labelledby="insertModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="insertModalLabel">도서 등록</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                 <table class="table table-bordered dataTable" border="1">
                     <thead>
                         <tr>
-                            <td>제목</td>
-                            <td>저자</td>
+                            <th>제목</th>
+                            <th>저자</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
+                    	 <tr>
                             <td>
-                				<input type="text" id="title">
+                				<input type="text" id="title" class="form-control form-control-user">
                             </td>
                             <td>
-                				<input type="text" id="author">
+                				<input type="text" id="author" class="form-control form-control-user">
                             </td>
                         </tr>
                     </tbody>
                 </table>
-            </div>
-            <div>
-                <button type="button" onclick="insertBook()">등록</button>
-                <button type="button" onclick="closeModal()">닫기</button>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="insertBook()">등록</button>
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">닫기</button>
+                </div>
             </div>
         </div>
-        <div class="modal_layer"></div>
     </div>
     <!-- 도서 등록 모달 끝 -->
-    
-	<!-- 도서 수정 모달 시작 -->
-    <div class="modal" id="modifyModal">
-        <div class="modal_content">
-            <h2>도서 수정</h2>
-            <div>
-	            <input type="hidden" id="inputBookCode">
-            </div>
-            <div>
-                <table border="1">
-                    <thead>
-                        <tr>
-                            <td>제목</td>
-                            <td>저자</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                				<input type="text" id="inputTitle">
-                            </td>
-                            <td>
-                				<input type="text" id="inputAuthor">
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div>
-                <button type="button" onclick="modifyBook()">수정</button>
-                <button type="button" onclick="closeModal()">닫기</button>
+   
+    <!-- 도서 수정 모달 시작 -->
+    <div class="modal fade" id="modifyModal" tabindex="-1" role="dialog" aria-labelledby="modifyModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modifyModalLabel">도서 수정</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+	                <input type="hidden" id="inputBookCode">
+	                <table class="table table-bordered dataTable" border="1">
+	                    <thead>
+	                        <tr>
+	                            <th>제목</th>
+	                            <th>저자</th>
+	                        </tr>
+	                    </thead>
+	                    <tbody>
+	                        <tr>
+	                            <td>
+	                				<input type="text" id="inputTitle" class="form-control form-control-user">
+	                            </td>
+	                            <td>
+	                				<input type="text" id="inputAuthor" class="form-control form-control-user">
+	                            </td>
+	                        </tr>
+	                    </tbody>
+	                </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="modifyBook()">수정</button>
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">닫기</button>
+                </div>
             </div>
         </div>
-        <div class="modal_layer"></div>
     </div>
     <!-- 도서 수정 모달 끝 -->
     
-	<!-- 회원가입 모달 시작 -->
-    <div class="modal" id="memberModal">
-        <div class="modal_content">
-            <h2>회원 가입</h2>
-            <div>
-                <table border="1">
-                        <tr>
-                            <td>회원 ID</td>
-                            <td>
-                				<input type="text" id="checkId">
-	                            <button type="button" id="checkBtn" onclick="checkId()">중복 확인</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>이름</td>
-                            <td>
-                				<input type="text" id="inputName">
-                            </td>
-						</tr>
-						<tr>
-                            <td>전화번호</td>
-                            <td>
-                				<input type="text" id="inputPhone1" maxlength="3">-
-		                        <input type="text" id="inputPhone2" maxlength="4">-
-		                        <input type="text" id="inputPhone3" maxlength="4">
-                        	</td>
-                        </tr>
-                </table>
-            </div>
-            <div>
-                <button type="button" onclick="joinMember()">가입</button>
-                <button type="button" onclick="closeModal()">닫기</button>
+    <!-- 회원가입 모달 시작 -->
+    <div class="modal fade" id="memberModal" tabindex="-1" role="dialog" aria-labelledby="memberModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="memberModalLabel">회원 가입</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+					    <div class="form-group row">
+					        <div class="col-sm-6 mb-3 mb-sm-0">
+					            <input type="text" class="form-control form-control-user" id="checkId" placeholder="회원 ID">
+					        </div>
+					        <div class="col">
+					            <button type="button" id="checkBtn" class="btn btn-sm btn-danger btn-user" onclick="checkId()">중복 확인</button>
+					        </div>
+					    </div>
+					    <div class="form-group">
+					        <input type="text" class="form-control form-control-user" id="inputName" placeholder="이름">
+					    </div>
+					    <div class="form-group d-flex">
+					        <div>
+					            <input type="text" class="form-control form-control-user" id="inputPhone1" maxlength="3" placeholder="전화번호">
+					        </div>
+					        <div>
+					        </div>-<div>
+					            <input type="text" class="form-control form-control-user" id="inputPhone2" maxlength="4">
+					        </div>
+					        <div>-</div>
+					        <div>
+					            <input type="text" class="form-control form-control-user" id="inputPhone3" maxlength="4">
+					        </div>
+					    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary btn-user" onclick="joinMember()">가입</button>
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">닫기</button>
+                </div>
             </div>
         </div>
-        <div class="modal_layer"></div>
     </div>
     <!-- 회원가입 모달 끝 -->
-
+    
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -267,7 +287,7 @@
             {
                 headerName: "대출 관리",
                 cellRenderer: function (params) {
-                    return `<button onclick="manageClick('${params.data.bookCode}')">관리</button>`;
+                    return `<button class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm" onclick="manageClick('${params.data.bookCode}')">대출 관리</button>`;
                 },
                 cellStyle: { textAlign: "left" },
             },
@@ -277,7 +297,7 @@
             {
                 headerName: "도서 수정",
                 cellRenderer: function (params) {
-                    return `<button onclick="modifyClick(this)">수정</button>`;
+                    return `<button class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" onclick="modifyClick(this)">도서 수정</button>`;
                 },
                 cellStyle: { textAlign: "left" },
             },
@@ -326,6 +346,8 @@
 
         // 관리 버튼
         function manageClick(bookCode) {
+        	$("#memberId").val("");
+        	
             $.ajax({
                 url: `/api/borrow/${bookCode}`,
                 method: "GET",
@@ -335,6 +357,7 @@
 
                     let borrowListHTML = '';
                     let lastBorrowStatus = '';
+                    let title = '';
                     
                     $("#bookCode").val(bookCode);
 
@@ -358,25 +381,32 @@
                             </tr> `;
 
                         lastBorrowStatus = borrowVO.borrowStatus;
+                        title = borrowVO.title;
                     });
-                    
-                    $("#borrowList").html(borrowListHTML);
-                    $("#lastBorrowStatus").html(lastBorrowStatus);
-
                     const borrowBtn = $("#borrowBtn");
                     const returnBtn = $("#returnBtn");
+                    const checkMemBtn = $("#checkMemBtn");
                     const inputId = $("#inputId");
 
-                    if (lastBorrowStatus == 'N') {
-                        inputId.css('display', 'none');
-                        borrowBtn.css('display', 'none');
-                        returnBtn.css('display', 'block');
-                    } else {
+                    if (lastBorrowStatus != 'N') {
                         inputId.css('display', 'block');
+                        checkMemBtn.css('display', 'block');
                         borrowBtn.css('display', 'block');
                         returnBtn.css('display', 'none');
+                    	lastBorrowStatus = "현재 대출 가능합니다.";
+                    } else {
+                        inputId.css('display', 'none');
+                        checkMemBtn.css('display', 'none');
+                        borrowBtn.css('display', 'none');
+                        returnBtn.css('display', 'block');
+                    	lastBorrowStatus = "현재 대출 불가합니다.";
                     }
 
+                    console.log("lastBorrowStatus",lastBorrowStatus);
+
+                    $("#borrowList").html(borrowListHTML);
+                    $("#lastBorrowStatus").html(lastBorrowStatus);
+                    $("#borrowModalLabel").html(title+" 대출 이력");
                 },
                 error: function (xhr, status, error) {
                     console.error('상태', status);
@@ -385,12 +415,36 @@
 
             $("#borrowModal").modal('show'); 
         };
-
-        // 모달 닫기 버튼
-        function closeModal() {
-            $(".modal").css("display", "none");
-        };
         
+    	 // 회원 확인 버튼
+        function checkMemClick(){
+        	const memberId = $("#memberId").val();
+       	    if (!memberId) {
+       	    	alert("아이디를 입력해주세요.");
+				return;
+		     }
+       	    
+	     	 $.ajax({
+	              url: "/api/member",
+	              method: "get",
+	              data: {memberId: memberId},
+	              contentType: "application/json; charset=utf-8",
+	              success: function (data) {
+	                  console.log('데이터', data);
+	                  if(data==0){
+	                 	 alert("없는 아이디입니다.");
+	                  }else{
+	                	  alert("회원 확인 완료.");
+	                	  $("#memberId").prop("readonly", true);
+	                      $("#checkMemBtn").prop("disabled", true);
+	                  }
+	              },
+	              error: function (xhr, status, error) {
+	                  console.error('상태', status);
+	              },
+	          });
+    	 };
+
         // 대출 버튼
         function borrowClick(){
         	const memberId = $("#memberId").val();
@@ -399,6 +453,11 @@
 				return;
 		     }
        	    
+       		 if (!$('#checkMemBtn').prop('disabled')) {
+    	    	alert("회원인지 확인해주세요.");
+				return;
+		     }
+       	 
         	let bookCode = $("#bookCode").val();
         	
         	let borrowVO = JSON.stringify({
@@ -440,6 +499,8 @@
                 contentType: "application/json; charset=utf-8",
                 success: function (data) {
                       console.log('데이터', data);
+                      $("#inputId").css('display', 'block');
+                      $("#checkMemBtn").css('display', 'block');
                       alert("반납 처리되었습니다.");
                       manageClick(bookCode);
                   },
@@ -453,7 +514,7 @@
         function insertClick(){
         	$("#title").val("");
         	$("#author").val("");
-        	$("#insertModal").css("display", "block");
+        	$("#insertModal").modal('show'); 
         }
         
         // 도서 등록하기
@@ -480,7 +541,7 @@
                  success: function (data) {
                      console.log('데이터', data);
                      getData();
-                     $(".modal").css("display", "none");
+                     $(".modal").modal('hide'); 
                      alert("등록 처리되었습니다.");
                  },
                  error: function (xhr, status, error) {
@@ -503,7 +564,7 @@
             $("#inputTitle").val(title);
             $("#inputAuthor").val(author);
             
-        	$("#modifyModal").css("display", "block");
+        	$("#modifyModal").modal('show');
         }
         
      	// 도서 수정하기	
@@ -526,7 +587,7 @@
                 success: function (data) {
                       console.log('데이터', data);
                       getData();
-                      $(".modal").css("display", "none");
+                      $(".modal").modal('hide');
                       alert("수정 처리되었습니다.");
                   },
                   error: function (xhr, status, error) {
@@ -545,7 +606,7 @@
         	$("#inputPhone2").val("");
         	$("#inputPhone3").val("");
         	
-        	$("#memberModal").css("display", "block");
+        	$("#memberModal").modal('show');
         }
      	
      	// 회원 가입하기
@@ -588,7 +649,7 @@
                  contentType: "application/json; charset=utf-8",
                  success: function (data) {
                      console.log('데이터', data);
-                     $(".modal").css("display", "none");
+                     $(".modal").modal('hide');
                      alert("가입 처리되었습니다.");
                  },
                  error: function (xhr, status, error) {

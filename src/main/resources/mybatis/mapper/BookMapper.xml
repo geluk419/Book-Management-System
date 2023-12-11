@@ -11,6 +11,8 @@
 	    author
 	FROM
 	    book
+   	ORDER BY
+    	book_code DESC
 </select>
 
 <!-- 도서 등록 -->

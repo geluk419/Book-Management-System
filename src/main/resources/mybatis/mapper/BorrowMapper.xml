@@ -6,18 +6,20 @@
 <!-- 대출 이력 -->
 <select id="listBorrow" parameterType="BorrowVO" resultType="BorrowVO">
 	SELECT
-	    borrow_code,
-	    borrow_date,
-	    return_date,
-	    borrow_status,
-	    member_id,
-	    book_code
+	    w.borrow_code,
+	    w.borrow_date,
+	    w.return_date,
+	    w.borrow_status,
+	    w.member_id,
+	    w.book_code,
+	    k.title
 	FROM
-	    borrow
-    WHERE
-   		book_code = #{bookCode}
-   	ORDER BY
-    	borrow_code
+	    borrow w
+	    LEFT JOIN book   k ON w.book_code = k.book_code
+	WHERE
+	    w.book_code = #{bookCode}
+	ORDER BY
+	    w.borrow_code
 </select>
 
 <!-- 도서 대출 -->
