@@ -1,7 +1,7 @@
 version: 0.0
 os: windows
 files:
-  - source: /
+  - source: D:\myTool\sts4WS\book\
     destination: C:\Users\Application
     overwrite: true
 
