@@ -1,7 +1,7 @@
 version: 0.0
 os: windows
 files:
-  - source: src/
+  - source: /
     destination: C:\ProgramData\Amazon\CodeDeploy
     overwrite: true
 
